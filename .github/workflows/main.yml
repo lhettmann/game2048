@@ -46,7 +46,6 @@ jobs:
   deploy:
     runs-on: self-hosted
     needs: [publish-job]
-    environment: "Game Server"
     steps:
       - uses: actions/checkout@v2
       - run: docker rm --force tomcat
