@@ -42,3 +42,14 @@ jobs:
           with:
             name: Package
             path: staging
+
+  deploy:
+    runs-on: self-hosted
+    needs: [publish-job]
+    environment: "Game Server"
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker rm --force tomcat
+      - run: docker image rm --force game2048
+      - run: echo -e 'FROM tomcat:9.0.46-jdk11 \n COPY ./target/game2048.war /usr/local/tomcat/webapps' | docker build -t game2048 -f- .
+      - run: docker run --rm -d --name tomcat -p 8080:8080 game2048
