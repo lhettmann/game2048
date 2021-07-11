@@ -9,7 +9,7 @@ on:
 jobs:
   build_and_test:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
   publish-job:
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       needs: [build_and_test]
       steps:
         - uses: actions/checkout@v2
