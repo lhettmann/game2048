@@ -47,10 +47,6 @@ jobs:
     needs: publish-job
     runs-on: self-hosted
     steps:
-      - uses: actions/cache@v2
-        with:
-         path: $maven_packages_cache
-         key: ${{runner.os}}-${{hashFiles('**/lockfiles')}}
       - run: docker rm --force game2048
       - run: docker image rm --force game2048
       - run: echo -e 'from tomcat:latest \n COPY ./target/game2048.war /usr/local/tomcat/webapps' | docker build -t game2048 -f- .
