@@ -44,8 +44,14 @@ jobs:
             path: staging
 
   deploy:
-    runs-on: ubuntu-latest
-    needs: [publish-job]
+    needs: publish-job
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
-      - run: mvn tomcat7:deploy
+      - uses: actions/cache@v2
+        with:
+         path: $maven_packages_cache
+         key: ${{runner.os}}-${{hashFiles('**/lockfiles')}}
+      - run: docker rm --force game2048
+      - run: docker image rm --force game2048
+      - run: echo -e 'from tomcat:latest \n COPY ./target/game2048.war /usr/local/tomcat/webapps' | docker build -t game2048 -f- .
+      - run: docker run --rm -d --name game2048 -p 8080:8080 game2048
