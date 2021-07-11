@@ -45,7 +45,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted
-    needs: publish-job
+    needs: [publish-job]
     steps:
       - run: docker rm --force game2048
       - run: docker image rm --force game2048
